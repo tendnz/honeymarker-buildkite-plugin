@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+set -exuo pipefail
+
+if [[ ${BUILDKITE_COMMAND_EXIT_STATUS:-0} != "0" ]]
+then
+  echo "--- Skipping honeymarker because the command failed"
+  exit 0
+fi
+
+
+message=${BUILDKITE_PLUGIN_HONEYMARKER_MESSAGE}
+writekey=${BUILDKITE_PLUGIN_HONEYMARKER_WRITEKEY}
+dataset=${BUILDKITE_PLUGIN_HONEYMARKER_DATASET}
+url=${BUILDKITE_PLUGIN_HONEYMARKER_URL:-""}
+type=${BUILDKITE_PLUGIN_HONEYMARKER_TYPE:-"deploy"}
+
+echo "--- :bee: Adding a marker to ${dataset}"
+
+curl -X POST -H "X-Honeycomb-Team: ${writekey}" \
+  -d "{\"message\": \"${message}\", \"type\":\"${type}\", \"url\": \"${url}\" , \"start_time\": ${now}}" \
+  https://api.honeycomb.io/1/markers/${dataset}
+
+
+
