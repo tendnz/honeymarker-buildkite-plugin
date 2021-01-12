@@ -34,8 +34,6 @@ if [[ $update == "false" ]]; then
 
   id=$(echo $result | jq -r ".id")
 
-  echo "honeycomb id is $id"
-
   buildkite-agent meta-data set "honeymarker_${BUILDKITE_BUILD_ID}_${updatekey}" "${id}"
 fi
 
