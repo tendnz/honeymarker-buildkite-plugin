@@ -14,8 +14,8 @@ steps:
     plugins:
       - tendnz/honeymarker#v1.0.5:
           message: "v1.0.0-prod" 
-          writekey: $HONEYCOMB_WRITE_KEY
-          dataset: tend-dev-testing
+          writekey: ${HONEYCOMB_WRITE_KEY}
+          dataset: test-dataset
 ```
 
 With all options customized:
@@ -25,11 +25,11 @@ steps:
   - command: make
     plugins:
       - tendnz/honeymarker#v1.0.5:
-          message: "v1.0.0-prod"
-          writekey: $HONEYCOMB_WRITE_KEY
-          dataset: tend-dev-testing
-          url: https://buildite.com/somewhere
-          type: prod-deploys
+          message: "v1.1.${BUILDKITE_BUILD_NUMBER}"
+          writekey: ${HONEYCOMB_WRITE_KEY}
+          dataset: "dataset-name-here"
+          url: ${BUILDKITE_BUILD_URL}
+          updatekey: "deploy-$ENV"
 ```
 
 ## Configuration
