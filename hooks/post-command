@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 
-set -exuo pipefail
+set -euo pipefail
+
+if [[ "${BUILDKITE_PLUGIN_HONEYMARKER_DEBUG:-false}" =~ (true|on|1) ]] ; then
+  echo "~~~ :hammer: Enabling debug mode"
+  set -x
+fi
 
 if [[ ${BUILDKITE_COMMAND_EXIT_STATUS:-0} != "0" ]]
 then

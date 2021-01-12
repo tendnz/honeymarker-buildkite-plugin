@@ -22,3 +22,5 @@ configuration:
       type: boolean
     updatekey:
       type: string
+    debug:
+      type: boolean
