@@ -20,3 +20,5 @@ configuration:
       type: string
     update:
       type: boolean
+    updatekey:
+      type: string

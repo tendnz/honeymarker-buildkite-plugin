@@ -66,6 +66,12 @@ steps:
 
   Should we update? set to "true" if so (default to false) (has to have a false be run first!)
 
+  Note that update uses a key from the previous "create", which is stored in a meta-data variable. If you want overlapping markers, include a update key
+
+- **updatekey** (optional)
+
+  The key to use for overlapping markers. Means we can work out which marker to close when we update.
+
 
 
 ## Tests / Linting

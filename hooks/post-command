@@ -15,10 +15,8 @@ dataset=${BUILDKITE_PLUGIN_HONEYMARKER_DATASET}
 url=${BUILDKITE_PLUGIN_HONEYMARKER_URL:-""}
 type=${BUILDKITE_PLUGIN_HONEYMARKER_TYPE:-"deploy"}
 update=${BUILDKITE_PLUGIN_HONEYMARKER_UPDATE:-false}
+updatekey=${BUILDKITE_PLUGIN_HONEYMARKER_UPDATEKEY:-""}
 now=$(date '+%s')
-
-echo "build id: ${BUILDKITE_BUILD_ID}"
-
 
 
 if [[ $update == "false" ]]; then
@@ -33,10 +31,10 @@ if [[ $update == "false" ]]; then
 
   echo "honeycomb id is $id"
 
-  buildkite-agent meta-data set "honeymarker_${BUILDKITE_BUILD_ID}" "${id}"
+  buildkite-agent meta-data set "honeymarker_${BUILDKITE_BUILD_ID}_${updatekey}" "${id}"
 else
   echo "--- :bee: Updating the marker to ${dataset}"
-  marker_id=$(buildkite-agent meta-data get "honeymarker_${BUILDKITE_BUILD_ID}")
+  marker_id=$(buildkite-agent meta-data get "honeymarker_${BUILDKITE_BUILD_ID}_${updatekey}")
 
   result=$(curl -X PUT -H "X-Honeycomb-Team: ${writekey}" \
     -d "{\"message\": \"${message}\", \"type\":\"${type}\", \"url\": \"${url}\" , \"end_time\": ${now}}" \
