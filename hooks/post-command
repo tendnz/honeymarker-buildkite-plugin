@@ -41,8 +41,6 @@ else
   result=$(curl -X PUT -H "X-Honeycomb-Team: ${writekey}" \
     -d "{\"message\": \"${message}\", \"type\":\"${type}\", \"url\": \"${url}\" , \"end_time\": ${now}}" \
     https://api.honeycomb.io/1/markers/${dataset}/${marker_id})
-
-  buildkite-agent meta-data set "honeymarker_${BUILDKITE_BUILD_ID}" ""
 fi
 
 
