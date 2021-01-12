@@ -1,7 +1,7 @@
 name: Honeycomb Honeymarker
 description: A Buildkite plugin to add a marker to your Honeycomb dataset
 author: https://github.com/nicwise
-requirements: [curl]
+requirements: [curl, jq]
 configuration:
   required:
     - message

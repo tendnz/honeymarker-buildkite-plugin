@@ -14,12 +14,35 @@ writekey=${BUILDKITE_PLUGIN_HONEYMARKER_WRITEKEY}
 dataset=${BUILDKITE_PLUGIN_HONEYMARKER_DATASET}
 url=${BUILDKITE_PLUGIN_HONEYMARKER_URL:-""}
 type=${BUILDKITE_PLUGIN_HONEYMARKER_TYPE:-"deploy"}
+update=${BUILDKITE_PLUGIN_HONEYMARKER_UPDATE:-false}
+now=$(date '+%s')
 
-echo "--- :bee: Adding a marker to ${dataset}"
+echo "build id: ${BUILDKITE_BUILD_ID}"
 
-curl -X POST -H "X-Honeycomb-Team: ${writekey}" \
-  -d "{\"message\": \"${message}\", \"type\":\"${type}\", \"url\": \"${url}\" , \"start_time\": ${now}}" \
-  https://api.honeycomb.io/1/markers/${dataset}
 
+
+if [[ $update == "false" ]]; then
+
+  echo "--- :bee: Adding a marker to ${dataset}"
+
+  result=$(curl -X POST -H "X-Honeycomb-Team: ${writekey}" \
+    -d "{\"message\": \"${message}\", \"type\":\"${type}\", \"url\": \"${url}\" , \"start_time\": ${now}}" \
+    https://api.honeycomb.io/1/markers/${dataset})
+
+  id=$(echo $result | jq -r ".id")
+
+  echo "honeycomb id is $id"
+
+  buildkite-agent meta-data set "honeymarker_${BUILDKITE_BUILD_ID}" "${id}"
+else
+  echo "--- :bee: Updating the marker to ${dataset}"
+  marker_id=$(buildkite-agent meta-data get "honeymarker_${BUILDKITE_BUILD_ID}")
+
+  result=$(curl -X PUT -H "X-Honeycomb-Team: ${writekey}" \
+    -d "{\"message\": \"${message}\", \"type\":\"${type}\", \"url\": \"${url}\" , \"end_time\": ${now}}" \
+    https://api.honeycomb.io/1/markers/${dataset}/${marker_id})
+
+  buildkite-agent meta-data set "honeymarker_${BUILDKITE_BUILD_ID}" ""
+fi
 
 

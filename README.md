@@ -62,6 +62,9 @@ steps:
 
   The type. Freeform, but the same type will have the same color. Defaults to "deploy"
 
+- **update** (optional)
+
+  Should we update? set to "true" if so (default to false) (has to have a false be run first!)
 
 
 
